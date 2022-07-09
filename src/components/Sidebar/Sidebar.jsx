@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-import lightModeIcon from "../../assets/mode/light-mode.png";
-import darkModeIcon from "../../assets/mode/dark-mode.png";
+import lightModeIcon from "../../assets/icons/light-mode.png";
+import darkModeIcon from "../../assets/icons/dark-mode.png";
 
 const Sidebar = ({ isLightMode, setIsLightMode }) => {
   const handleClick = () => {

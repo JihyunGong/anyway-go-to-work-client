@@ -10,7 +10,7 @@ import { login } from "../../api/api";
 
 import logo from "../../assets/logo.png";
 
-const Login = ({ isLightMode }) => {
+const Login = ({ isLightMode, setModalInfo }) => {
   const handleLogin = async () => {
     const userData = await googlePopup(firebaseAuth, googleProvider);
     const firebaseToken = await userData.user.getIdToken();
@@ -20,7 +20,14 @@ const Login = ({ isLightMode }) => {
       const { id, name, email, token } = res.data.data;
 
       if (token) {
-        localStorage.setItem("profile", { id, name, email, token });
+        localStorage.setItem(
+          "profile",
+          JSON.stringify({ id, name, email, token })
+        );
+        setModalInfo((prevState) => ({
+          ...prevState,
+          companyModal: "Company Sign in",
+        }));
       }
     }
   };

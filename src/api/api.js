@@ -6,7 +6,9 @@ const API = Axios.create({
 
 API.interceptors.request.use((req) => {
   if (localStorage.getItem("profile")) {
-    req.headers.Authorization = `Bearer ${localStorage.getItem("profile")}`;
+    req.headers.Authorization = `Bearer ${
+      JSON.parse(localStorage.getItem("profile")).token
+    }`;
   }
 
   return req;
@@ -31,4 +33,16 @@ export const login = (firebaseToken) => {
     {},
     { headers: { Authorization: `Bearer ${firebaseToken}` } }
   );
+};
+
+export const getCompany = (employeeId, companyInfo) => {
+  return API.get(`/companies/${employeeId}`, { params: companyInfo });
+};
+
+export const createCompany = (companyInfo) => {
+  return API.post("/companies", { ...companyInfo });
+};
+
+export const updateCompany = (companyId) => {
+  return API.patch(`/companies/${companyId}`);
 };
