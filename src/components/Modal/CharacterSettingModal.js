@@ -61,6 +61,7 @@ const CharacterSettingModal = ({ modalInfo, setModalInfo }) => {
     event.preventDefault();
 
     if (!nickname) {
+      closeModal();
       navigate("/error");
       return;
     }
