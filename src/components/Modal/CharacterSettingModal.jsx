@@ -3,9 +3,12 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import Portal from "../Portal/Portal";
+import UseEmail from "../../hooks/useEmail";
+import getDateTime from "../../utils/getDateTime";
 
 import leftArrow from "../../assets/icons/left-arrow.png";
 import rightArrow from "../../assets/icons/right-arrow.png";
+import checkIcon from "../../assets/icons/check-icon.png";
 import alien from "../../assets/characters/alien.png";
 import babyBoy from "../../assets/characters/baby-boy.png";
 import babyGirl from "../../assets/characters/baby-girl.png";
@@ -21,13 +24,18 @@ import oldBoy from "../../assets/characters/old-boy.png";
 import oldGirl from "../../assets/characters/old-girl.png";
 import princess from "../../assets/characters/princess.png";
 import witch from "../../assets/characters/witch.png";
-import checkIcon from "../../assets/icons/check-icon.png";
 
-const CharacterSettingModal = ({ modalInfo, setModalInfo }) => {
+const CharacterSettingModal = ({
+  modalInfo,
+  setModalInfo,
+  setCharacter,
+  nickname,
+  setNickname,
+  setTimestamp,
+}) => {
   const navigate = useNavigate();
 
-  const [nickname, setNickname] = useState("");
-  const [character, setCharacter] = useState("");
+  const employee = JSON.parse(localStorage.getItem("profile"));
   const [counter, setCounter] = useState(0);
   const companyId = modalInfo.characterSettingModal;
 
@@ -49,15 +57,20 @@ const CharacterSettingModal = ({ modalInfo, setModalInfo }) => {
     witch,
   ];
 
+  const { loading, submitted, error, sendEmail } = UseEmail(
+    "https://public.herotofu.com/v1/fc6497d0-08e4-11ed-be50-e78da9ee852d"
+  );
+
   const closeModal = () => {
     setCharacter(characters[counter]);
     setModalInfo((prevState) => ({
       ...prevState,
       characterSettingModal: "",
     }));
+    setTimestamp(getDateTime(new Date()));
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
     if (!nickname) {
@@ -68,6 +81,13 @@ const CharacterSettingModal = ({ modalInfo, setModalInfo }) => {
 
     closeModal();
     navigate(`/companies/${companyId}`);
+
+    const dateTime = getDateTime(new Date());
+
+    sendEmail({
+      employeeName: employee.name,
+      workingTime: dateTime,
+    });
   };
 
   return (

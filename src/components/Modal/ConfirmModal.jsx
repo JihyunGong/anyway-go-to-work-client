@@ -1,23 +1,65 @@
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import Portal from "../Portal/Portal";
+import { firebaseAuth } from "../../config/firebase";
+import { socketApi } from "../../config/socket";
+import UseEmail from "../../hooks/useEmail";
+import getDateTime from "../../utils/getDateTime";
 
 import closeIcon from "../../assets/icons/close-icon.png";
 import checkIcon from "../../assets/icons/check-icon.png";
 
-const DailyScrumModal = ({ setModalInfo }) => {
-  const [content, setContent] = useState("");
+const ConfirmModal = ({ modalInfo, setModalInfo, setTimestamp }) => {
+  const navigate = useNavigate();
+
+  const employee = JSON.parse(localStorage.getItem("profile"));
+  const { loading, submitted, error, sendEmail } = UseEmail(
+    "https://public.herotofu.com/v1/fc6497d0-08e4-11ed-be50-e78da9ee852d"
+  );
 
   const closeModal = () => {
     setModalInfo((prevState) => ({
       ...prevState,
-      dailyScrumModal: "",
+      confirmModal: "",
     }));
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    switch (modalInfo.confirmModal) {
+      case "Text Video Chatting Confirm":
+        break;
+      case "Text Chatting Confrim":
+        break;
+      case "Screen Sharing Confirm":
+        break;
+      case "Working Confirm":
+        break;
+      case "Leaving Confirm":
+        await firebaseAuth.signOut();
+
+        setTimestamp(new Date());
+
+        socketApi.leaveRoom(employee.id);
+
+        localStorage.removeItem("profile");
+
+        if (!localStorage.getItem("profile")) {
+          navigate("/");
+        }
+
+        const dateTime = getDateTime(new Date());
+
+        sendEmail({
+          employeeName: employee.name,
+          leavingTime: dateTime,
+        });
+        break;
+      default:
+    }
 
     closeModal();
   };
@@ -32,12 +74,7 @@ const DailyScrumModal = ({ setModalInfo }) => {
             alt="Close"
             onClick={closeModal}
           />
-          <div className="messageContainer">Daily Scrum</div>
-          <textarea
-            className="contentContainer"
-            value={content}
-            onChange={(event) => setContent(event.target.value)}
-          />
+          <div className="messageContainer">{modalInfo.confirmModal}</div>
           <img
             className="checkButton"
             src={checkIcon}
@@ -68,8 +105,8 @@ const ModalStyle = styled.div`
     align-items: center;
     flex-direction: column;
     position: relative;
-    width: 489px;
-    height: 373px;
+    width: 454px;
+    height: 214px;
     border: none;
     border-radius: 25px;
     background-color: white;
@@ -86,30 +123,17 @@ const ModalStyle = styled.div`
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 28px;
+      margin-top: 80px;
+      font-size: 24px;
       font-weight: 200;
       text-align: center;
     }
 
-    .contentContainer {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 453px;
-      height: 235px;
-      background: #c8c8c8;
-      border-radius: 5px;
-      margin-top: 25px;
-      font-size: 20px;
-      font-weight: 200;
-      resize: none;
-    }
-
     .checkButton {
-      margin-top: 15px;
+      margin-top: 50px;
       cursor: pointer;
     }
   }
 `;
 
-export default DailyScrumModal;
+export default ConfirmModal;

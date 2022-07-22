@@ -15,7 +15,7 @@ const CompanyModal = ({ setModalInfo }) => {
   const [isSigninModal, setIsSigninModal] = useState(true);
   const [name, setName] = useState("");
   const [secretCode, setSecretCode] = useState("");
-  const profile = JSON.parse(localStorage.getItem("profile"));
+  const employee = JSON.parse(localStorage.getItem("profile"));
 
   let companyInfo = {};
 
@@ -31,7 +31,7 @@ const CompanyModal = ({ setModalInfo }) => {
     event.preventDefault();
 
     if (isSigninModal) {
-      const res = await api.getCompany(profile.id, { name, secretCode });
+      const res = await api.getCompany(employee.id, { name, secretCode });
 
       if (res.data.error) {
         closeModal();
@@ -42,7 +42,7 @@ const CompanyModal = ({ setModalInfo }) => {
       companyInfo = res.data.data.company;
 
       if (
-        companyInfo.employees.every((employee) => employee._id !== profile.id)
+        companyInfo.employees.every((employee) => employee._id !== employee.id)
       ) {
         const res = await api.updateCompany(companyInfo._id);
 
