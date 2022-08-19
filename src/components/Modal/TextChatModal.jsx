@@ -118,7 +118,7 @@ const ModalStyle = styled.div`
     flex-direction: column;
     position: relative;
     top: 120px;
-    left: 570px;
+    left: 450px;
     width: 298px;
     height: 510px;
     border: none;

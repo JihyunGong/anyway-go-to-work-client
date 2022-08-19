@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import Portal from "../Portal/Portal";
 import { socketApi } from "../../config/socket";
-import PhotoModal from "./PhotoModal";
 
 const StateModal = ({ setModalInfo, employees, company }) => {
   const employee = JSON.parse(localStorage.getItem("profile"));
@@ -99,7 +98,7 @@ const ModalStyle = styled.div`
     flex-direction: column;
     position: relative;
     top: 130px;
-    left: 570px;
+    left: 450px;
     width: 298px;
     height: 510px;
     border: none;

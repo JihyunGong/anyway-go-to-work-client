@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import * as PIXI from "pixi.js";
 
 import { socket, socketApi } from "../../config/socket";
-
-import officeBackground from "../../assets/backgrounds/office-background.png";
 
 const Office = ({
   employees,
@@ -16,6 +15,63 @@ const Office = ({
 }) => {
   const employee = JSON.parse(localStorage.getItem("profile"));
   const { companyId } = useParams();
+
+  const canvasRef = useRef(null);
+
+  let player;
+
+  useEffect(() => {
+    const app = new PIXI.Application({
+      width: 1000,
+      height: 600,
+      transparent: true,
+    });
+
+    canvasRef.current.appendChild(app.view);
+    app.start();
+
+    player = new PIXI.Sprite.from(character);
+
+    player.interactive = true;
+    player.buttonMode = true;
+    player.anchor.set(0.5);
+    player.scale.set(0.2);
+
+    player
+      .on("pointerdown", onDragStart)
+      .on("pointerup", onDragEnd)
+      .on("pointerupoutside", onDragEnd)
+      .on("pointermove", onDragMove);
+
+    player.x = app.view.width / 2;
+    player.y = app.view.height / 2;
+
+    app.stage.addChild(player);
+
+    function onDragStart(event) {
+      player.data = event.data;
+      player.alpha = 0.5;
+      player.dragging = true;
+    }
+
+    function onDragEnd() {
+      player.alpha = 1;
+      player.dragging = false;
+      player.data = null;
+    }
+
+    function onDragMove() {
+      if (player.dragging) {
+        const newPosition = player.data.getLocalPosition(player.parent);
+        player.x = newPosition.x;
+        player.y = newPosition.y;
+      }
+    }
+
+    return () => {
+      app.destroy(true, true);
+    };
+  }, []);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -70,7 +126,7 @@ const Office = ({
 
   return (
     <OfficeStyle>
-      <img src={officeBackground} alt="Office Background" />
+      <div ref={canvasRef}></div>
     </OfficeStyle>
   );
 };
@@ -79,12 +135,11 @@ const OfficeStyle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
   height: 100vh;
 
   .character {
-    width: 27px;
-    height: 29px;
+    width: 25px;
+    height: 27px;
   }
 `;
 
