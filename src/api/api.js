@@ -29,7 +29,7 @@ API.interceptors.response.use(
 
 export const login = (firebaseToken) => {
   return API.post(
-    "/",
+    "/login",
     {},
     { headers: { Authorization: `Bearer ${firebaseToken}` } }
   );

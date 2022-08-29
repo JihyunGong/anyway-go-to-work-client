@@ -5,7 +5,7 @@ import styled from "styled-components";
 import Portal from "../Portal/Portal";
 import { firebaseAuth } from "../../config/firebase";
 import { socketApi } from "../../config/socket";
-import UseEmail from "../../hooks/useEmail";
+import useEmail from "../../hooks/useEmail";
 import getDateTime from "../../utils/getDateTime";
 
 import closeIcon from "../../assets/icons/close-icon.png";
@@ -15,7 +15,7 @@ const ConfirmModal = ({ modalInfo, setModalInfo, setTimestamp }) => {
   const navigate = useNavigate();
 
   const employee = JSON.parse(localStorage.getItem("profile"));
-  const { loading, submitted, error, sendEmail } = UseEmail(
+  const { loading, submitted, error, sendEmail } = useEmail(
     "https://public.herotofu.com/v1/fc6497d0-08e4-11ed-be50-e78da9ee852d"
   );
 

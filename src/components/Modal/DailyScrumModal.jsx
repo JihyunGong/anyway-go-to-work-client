@@ -46,7 +46,6 @@ const DailyScrumModal = ({ modalInfo, setModalInfo, employees }) => {
             <textarea
               className="scrumContainer"
               value={scrum}
-              // placeholder={scrum ?? "스크럼 내용을 입력하세요."}
               disabled={modalInfo.dailyScrumModal !== employee.id}
               onChange={(event) => setScrum(event.target.value)}
             />

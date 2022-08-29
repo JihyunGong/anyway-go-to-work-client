@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const UseEmail = (endpointUrl) => {
+const useEmail = (endpointUrl) => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
@@ -47,4 +47,4 @@ const UseEmail = (endpointUrl) => {
   };
 };
 
-export default UseEmail;
+export default useEmail;

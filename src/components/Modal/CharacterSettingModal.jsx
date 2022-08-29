@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import Portal from "../Portal/Portal";
-import UseEmail from "../../hooks/useEmail";
+import useEmail from "../../hooks/useEmail";
 import getDateTime from "../../utils/getDateTime";
 
 import leftArrow from "../../assets/icons/left-arrow.png";
@@ -57,7 +57,7 @@ const CharacterSettingModal = ({
     witch,
   ];
 
-  const { loading, submitted, error, sendEmail } = UseEmail(
+  const { loading, submitted, error, sendEmail } = useEmail(
     "https://public.herotofu.com/v1/fc6497d0-08e4-11ed-be50-e78da9ee852d"
   );
 

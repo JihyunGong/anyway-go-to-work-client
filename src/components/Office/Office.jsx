@@ -48,25 +48,25 @@ const Office = ({
 
     app.stage.addChild(player);
 
-    function onDragStart(event) {
+    const onDragStart = (event) => {
       player.data = event.data;
       player.alpha = 0.5;
       player.dragging = true;
-    }
+    };
 
-    function onDragEnd() {
+    const onDragEnd = () => {
       player.alpha = 1;
       player.dragging = false;
       player.data = null;
-    }
+    };
 
-    function onDragMove() {
+    const onDragMove = () => {
       if (player.dragging) {
         const newPosition = player.data.getLocalPosition(player.parent);
         player.x = newPosition.x;
         player.y = newPosition.y;
       }
-    }
+    };
 
     return () => {
       app.destroy(true, true);
